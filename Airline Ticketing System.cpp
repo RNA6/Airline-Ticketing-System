@@ -1,17 +1,15 @@
 #include<iostream>
-#include <string>
-//to use the function stringstream(string)
-//that converts string to int 
+#include <string> 
 #include <sstream>
 
-//to use function sleep for(seconds(int))
-#include <thread>/*requires using c++11 which can be used by adding it
+#include <thread>
+/*requires using c++11 which can be used by adding it
 Tools -> Compiler Options...
 then write -std=c++11 in the first box -> then click OK
 this should allow the compiler to ues c++11*/
 #include <chrono>
 
-//Defining the maximum number of flights the customer can have
+//Maximum number of flights the customer can have
 #define maxFlights 10
 
 using namespace std;
@@ -20,13 +18,13 @@ using namespace this_thread;
 //helps for working with duration
 using namespace chrono;
 
-//Define the structure of Flight Reservations
+//The structure of Flight Reservations
 struct FlightReservation{
 	int number;
 	string destination;
 };
 
-//Define the structure of Customers
+//The structure of Customers
 struct Customer{
 	string name;
 	int id;
@@ -37,14 +35,14 @@ struct Customer{
 	FlightReservation flights[maxFlights];
 };
 
-//Define the structure of Nodes
+//The structure of Nodes
 struct Node{
 	Customer customer;
 	Node *left;
 	Node *right;
 };
 
-//clear uneccessary and redundant messages outputed to screen
+//Clear uneccessary and redundant messages outputed to screen
 void deleteText(int rows, int time){
 	/*sleep_for(seconds(time)) is used to sleep the particular 
 	thread (single sequential flow of control within a program) for a period of time*/ 
@@ -57,7 +55,6 @@ void deleteText(int rows, int time){
 	cout << "\033[" << rows << "A" << "\r" << "\033[J";
 }
 
-//Required for several functions
 //Check if the node is empty
 bool isEmpty(Node *root){
 	if(root == NULL)
@@ -69,24 +66,22 @@ bool isEmpty(Node *root){
 //CheckID duplication
 bool IDExist(Node *root, int id){
 	
-	//If the system is not empty check if there is a customer with the same id entered
+	//if the system is not empty check if there is a customer with the same id entered
 	if(!isEmpty(root)){
 		Node *curr = root;
-		Node *prev = NULL;
 		
 		while (!isEmpty(curr)) 
 		{
 			//check for existing customer with the same id entered
 			if(curr->customer.id == id){
 				cout << "There exist a customer with this ID. Try again!"<< endl;
-				cout << "------------------------" << endl;
+				cout << "-----------------------------------------------";
 				//delete some text from the screen
-				deleteText(3,4);
+				deleteText(2,4);
 				return true;
 			}
 			/*if this node does not equal the id provided
 			keep checking next nodes*/ 
-	        prev = curr;
 	        if (id < curr->customer.id)
 	            curr = curr->left;
 	        else
@@ -100,7 +95,7 @@ bool IDExist(Node *root, int id){
 }
 
 /*Check if the number entered, such as id or age,
-is in the correct form and within the acceptable range */
+is within the acceptable range */
 bool isCorrect(int number){
 	if(number <= 0)
 		return false;
@@ -108,15 +103,14 @@ bool isCorrect(int number){
 		return true;
 }
 
-//Check if this new flight already exists in the customer's list
+//Check if this new flight already exists in the customers list
 bool FlightExist(FlightReservation flight, Customer &customer){
     for (int i = 0; i < customer.flightCounter; i++) {
     	
         if (customer.flights[i].number == flight.number) {
         	if(customer.flights[i].destination == flight.destination)
             	return true; // Flight already exists for the customer
-        }
-        
+        }        
     }
     return false; // Flight does not exist
 }
@@ -132,7 +126,7 @@ int inputInt(string info){
 			cout << "Enter " << info << ": ";
 			getline(cin, input);
 			
-			// Convert string to int
+			//convert string to int
 			stringstream(input) >> number;
 			
 			for(int i = 0; i < input.length(); i++){
@@ -147,7 +141,6 @@ int inputInt(string info){
 				return number;
 			}
 			
-			//if it is not correct display this message
 			cout << "Invalid input try again!" << endl;
 			cout << "------------------------";
 			
@@ -195,8 +188,9 @@ string inputString(string info){
 		}
 		
 		//message will be displayed for 3 seconds then it will be deleted
-		cout << "Invalid " << info << ". Try again!";
-		deleteText(1,3);
+		cout << "Invalid " << info << ". Try again!" << endl;
+		cout << "-----------------------------------";
+		deleteText(2,3);
 		
 	}while(true);//until the entered string is in the correct form
 	
@@ -235,8 +229,9 @@ void inputMobileNumber(Customer &customer, string info){
 		}
 		
 		//message will be displayed for 3 seconds then it will be deleted
-		cout << "Invalid Mobile Number. Try again!";
-		deleteText(1,3);
+		cout << "Invalid Mobile Number. Try again!" << endl;
+		cout << "---------------------------------";
+		deleteText(2,3);
 		
 	}while(true);//until the entered string is in the correct form
     
@@ -270,7 +265,9 @@ void add1Flight(Customer &customer){
 	
 	//check if the max flights limit is reached
     if (customer.flightCounter == maxFlights) {
-        cout << "Cannot add more flights. Maximum limit reached.";
+        cout << "Cannot add more flights. Maximum limit reached." << endl;
+        cout << "--------------------------------------------------";
+        deleteText(1,3);
         return;
     }
     
@@ -284,9 +281,10 @@ void add1Flight(Customer &customer){
 	    if(!FlightExist(newFlight, customer)) //check if the flight does not already exist
 	    	break;
 	    
-	    cout << "Flight already exists for the customer!";
+	    cout << "Flight already exists for the customer!" << endl;
+	    cout << "---------------------------------------";
 	    //clear redundant messages from the screen
-		deleteText(3, 3);
+		deleteText(4, 3);
 	    
 	}while(FlightExist(newFlight, customer));
     
@@ -303,49 +301,48 @@ void add1Flight(Customer &customer){
 bool addMore(){
 	int choice;
 	do{
+			cout << endl;
 			cout << "Do you want to add another flight?" << endl;
 			choice = inputInt("1 for yes, 2 for no");
 			
 			//if the choice is outside the range display this message
 			if(choice != 1 && choice != 2){
 				cout << "Invalid input try again!" << endl;
-				cout << "------------------------" << endl;
+				cout << "------------------------";
 				
 				deleteText(4,3);
 				continue;
 			}
 			
-			//used to delet some rows from the output
 			deleteText(2,0);
 			
 			if(choice == 1)
 				return true;
 			else{
-				deleteText(0,0);
+				deleteText(1,0);
 				return false;
 			}
 							
 		}while(true);
 }
 
-//Used to add more flights to the customer
-void addExtraFlights(Customer &customer){
+//Used to add more than one flight to the customer
+void addFlights(Customer &customer){
 	
 	int flightCounter;
 	do{
-		cout << endl;
-		
-		if(!addMore())
-			break;
-			
 		flightCounter = customer.flightCounter;
 		add1Flight(customer);
 		
 		//check the flight counter of the customer
 		if(flightCounter + 1 > maxFlights){
-			deleteText(2,3);
+			deleteText(0,0);
 			break;
 		}		
+		
+		if(!addMore()){
+			break;
+		}	
 	}while(true);
 }
 
@@ -371,22 +368,22 @@ void updateCustomerInfo(Customer &customer){
 		
 		//this will change the value of the update counter
 		//that is used in the stop editing feature
-		if(choice != 5){
-			updateCounter = 1;
-		}
 	
 		switch ( choice )
 		{
 			case 1 :
-				updateName(customer) ;
+				updateName(customer);
+				updateCounter++;
 				break ;
 			
 			case 2 :
-				updateAge(customer);	
+				updateAge(customer);
+				updateCounter++;	
 				break;
 			
 			case 3 :
-		        updateMobileNumber(customer) ;
+		        updateMobileNumber(customer);
+		        updateCounter++;
 		        break ;
 			
 		    case 4:
@@ -394,9 +391,10 @@ void updateCustomerInfo(Customer &customer){
 		        add1Flight(customer);
 		        //check if it will exceed the maximum number of flights
 				if(flightCounter + 1 > maxFlights){
-					deleteText(9,3);
+					deleteText(9,0);
 				}
 				else{
+					updateCounter++;
 					cout << endl;
 				}
 				continue;	
@@ -411,8 +409,9 @@ void updateCustomerInfo(Customer &customer){
 				return;			  
 			
 		    default :
-		         cout << "Invalid choice. Please try again.";
-		         deleteText(9,3);
+		         cout << "Invalid choice. Please try again." << endl;
+		         cout << "---------------------------------";
+		         deleteText(10,3);
 		         continue;
 		}
 		cout << "----------------------------" << endl << endl;
@@ -441,8 +440,7 @@ Node *getNewNode(Node *root){
 	inputMobileNumber(newCustomer->customer, "Customer");
 	
 	cout << endl;
-	add1Flight(newCustomer->customer);
-	addExtraFlights(newCustomer->customer);
+	addFlights(newCustomer->customer);
 	
 	return newCustomer;
 }
@@ -451,7 +449,7 @@ Node *getNewNode(Node *root){
 /*Node *&root is written like this so the pointer itself is passed 
 by reference and can be changed directly*/
 void addCustomer(Node *&root){
-	//creat a new node and add new customer information
+	//creat a new node and initialize the customer information
     Node *newNode = getNewNode(root);
     
     //check if it is the first node to be inserted
@@ -484,14 +482,13 @@ Customer searchCustomer(Node *root, int id){
 	//initial value for the id
 	customer.id = -1; 
 	
-	Node *curr = root; //curr :the node we looking to find
+	Node *curr = root; //the node we looking to find
 	
-	//search for node
-    //until founded or raech null
+	//search for node until it is found or raech null
 	while (!isEmpty(curr)) 
 	{
-		
-		if(curr->customer.id == id){//node is founded
+		//node is found
+		if(curr->customer.id == id){
 			customer = curr->customer;
 			break;
 		}
@@ -503,10 +500,11 @@ Customer searchCustomer(Node *root, int id){
             curr = curr->right;
     }
     
-    if (isEmpty(curr)) //raech null: not found
+    if (isEmpty(curr)) //node is not found
 	{ 
-        cout << "Customer with id " << id << " is not found in the System.";
-        deleteText(12,4);
+        cout << "Customer with id " << id << " is not found in the System." << endl;
+        cout << "--------------------------------------------------";
+        deleteText(13,4);
     }
 	
     return customer;
@@ -521,7 +519,6 @@ void display1Flight(FlightReservation flight) {
 //Display all flights reserved for a customer
 void displayCustomerFlights(Customer customer) {
 	cout << endl;
-	//print customer's name
     cout << "Flights reserved for customer " << customer.name << ":" << endl;
     cout << endl;
     
@@ -547,6 +544,7 @@ void display1Customer(Customer &customer){
 void displayAllCustomers(Node *root , int &order){
     if(isEmpty(root))
         return;
+        
     displayAllCustomers(root->left, order);
     
     cout << "__________Customer " << ++order << " information__________" << endl;
@@ -561,9 +559,9 @@ void deleteCustomer(Node *&root, int id){
     Node *curr = root; //curr :the node we looking to delete
     Node *prev = NULL; //prev: father of curr
   
-    while (curr != NULL && curr->customer.id != id){//search for node
-    //until founded or raech null
-    //move to next
+  	//search for node until it is found or raech null
+    while (curr != NULL && curr->customer.id != id){
+    	//move to next
         prev = curr; 
         if (id < curr->customer.id) 
             curr = curr->left; 
@@ -572,12 +570,13 @@ void deleteCustomer(Node *&root, int id){
     }
 	 
     if (curr == NULL){ //raech null: not found
-        cout << "Customer with id " << id << " is not found in the System.";
-        deleteText(12,4);
-        return; //exit
+        cout << "Customer with id " << id << " is not found in the System." << endl;
+        cout << "--------------------------------------------------";
+        deleteText(13,4);
+        return; 
     }
 	
-	//if founded curr will be the node we looking to delete
+	//if found curr will be the node we looking to delete
 	name = curr->customer.name;
 	cout << "Customer " << name << " is deleted successfully!" << endl << endl;
     
@@ -587,12 +586,12 @@ void deleteCustomer(Node *&root, int id){
 		//used to point to child node, and initialize with null
         Node* newCurr = NULL;
         
-        if (curr->left == NULL) //to set the pos for newCurr
+        if (curr->left == NULL) //to set the position for newCurr
             newCurr = curr->right; 
         else
             newCurr = curr->left; 
   		
-  		// if we will delete the root and may has one child
+  		// if we will delete the root and it may has one child
         if (prev == NULL){
         	root = newCurr;
         	return;
@@ -606,31 +605,30 @@ void deleteCustomer(Node *&root, int id){
         delete curr;
     } 
     
-    //if the node we looking to delete has 2 child, apply the successor 
-    //the successor: The smallest value that greater than it
+    //if the node we are looking to delete has 2 children, use the successor
     else{ 
-        Node* succParent = NULL; //the successor parent like new prev
-        Node* succ; //the successor node like new curr
+        Node* succParent = NULL; //the successor parent
+        Node* succ; //the successor node
   
         succ = curr->right; //start from right to search the successor
         
-        //search the successor
+        //search for the successor
         while (succ->left != NULL){ 
-            succParent = succ; //prev=curr
+            succParent = succ; 
             succ = succ->left; //move curr to new pos
         } 
         
         //change value with successor
 		curr->customer = succ->customer;
 		
-		//if node we looking to delete isn't the parent for successor
+		//if node we are looking to delete isn't the parent for successor
         if (succParent != NULL)
-            //connect to right because no nods connected to the left
+            //connect to right because no nodes connected to the left
        		succParent->left = succ->right; 
        		
-	    // if node we looking to delete is the parent for successor
+	    // if node we are looking to delete is the parent for successor
 		else
-			//connect to right because no nods connected to the left
+			//connect to right because no nodes connected to the left
             curr->right = succ->right;
         delete succ;
     }
@@ -638,8 +636,9 @@ void deleteCustomer(Node *&root, int id){
 
 //Display masseage when the system is empty
 void emptySystem(){
-	cout << "There is no customer in the system!";
-	deleteText(11,3);	
+	cout << "There is no customer in the system!" << endl;
+	cout << "-----------------------------------";
+	deleteText(12,3);	
 }
 
 //Display the Menu list
@@ -657,7 +656,6 @@ void displayMenu(){
 
 int main()
 {
-	//creat the first node and initialize it to null
     Node *root = NULL;
     int choice;
     int order; //the index of customers in the Binary Search Tree
@@ -725,8 +723,8 @@ int main()
 				id = inputInt("Customer ID to display his flights information");
 	   			customer = searchCustomer(root, id);
 	   			
-	   			//check if the searched customer actually exists
-	   			//if the id is not found the customer id will be -1
+	   			//check if the searched customer exists
+	   			//if the id is not found the customer id will be -1 which is not correct
 	   			if(isCorrect(customer.id)){
 	   				displayCustomerFlights(customer);
 		   			cout << "----------------------------" << endl;
@@ -740,11 +738,12 @@ int main()
                 break;
                 
             default://if the choice entered is not in the list
-                cout << "Invalid choice ,Please try again.";
-                deleteText(11, 3);
+                cout << "Invalid choice, Please try again." << endl;
+                cout << "---------------------------------";
+                deleteText(12, 3);
         }
         
     } while (choice != 6);
     
-    return 0;
+    return 0; 
 }

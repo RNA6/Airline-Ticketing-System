@@ -485,7 +485,6 @@ Customer searchCustomer(Node *root, int id){
 	customer.id = -1; 
 	
 	Node *curr = root; //curr :the node we looking to find
-	Node *prev = NULL; //prev: father of curr
 	
 	//search for node
     //until founded or raech null
@@ -497,7 +496,6 @@ Customer searchCustomer(Node *root, int id){
 			break;
 		}
 		
-        prev = curr;
         //move to next nodes
         if (id < curr->customer.id)
             curr = curr->left;

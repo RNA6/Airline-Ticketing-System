@@ -138,7 +138,7 @@ int inputID(Node *root){
 	
 	return id;
 }
-
+//input string of characters and check if it is containing digit , or empty input
 string inputString(string info){
 	string input;
 	do{
@@ -171,7 +171,7 @@ void inputName(Customer &customer, string info){
 void inputAge(Customer &customer, string info){
 	customer.age = inputInt(info + " Age");
 }
-
+//input string that represent mobile number and check if it is all digits
 void inputMobileNumber(Customer &customer, string info){
 	string input;
 	do{
@@ -195,19 +195,19 @@ void inputMobileNumber(Customer &customer, string info){
     
     customer.mobileNumber= input;
 }
-
+// used to update the name of a specific customer
 void updateName(Customer &customer){
             cout << "Old Name: " << customer.name << endl;
             inputName(customer, "New");
             cout << "Name updated successfully.\n";
 }
-
+// used to update the age of a specific customer
 void updateAge(Customer &customer){
         cout << "Old Age: " << customer.age << endl;
         inputAge(customer, "new");
         cout << "Age updated successfully.\n";
 }
-
+// used to update the mobile number of a specific customer
 void updateMobileNumber(Customer &customer){
 	    cout << "Old Mobile Number: " << customer.mobileNumber << endl;
 	    inputMobileNumber(customer, "new");
@@ -289,7 +289,7 @@ void addExtraFlights(Customer &customer){
 		}		
 	}while(true);
 }
-
+// A list displaying options for updating information about a specific customer who can be accessed by the ID
 void updateCustomerInfo(Customer &customer){
 	int choice ; 
 	int flightCounter;

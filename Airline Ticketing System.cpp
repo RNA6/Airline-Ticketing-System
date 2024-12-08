@@ -4,7 +4,6 @@
 //to use function sleep for(seconds(int))
 #include <thread>
 #include <chrono>
-#include <windows.h>
 #define maxFlights 10
 using namespace std;
 using namespace this_thread;
